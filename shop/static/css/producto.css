@@ -1,0 +1,95 @@
+/* Estilos para el efecto de zoom en la imagen */
+.zoom-effect {
+    overflow: hidden;
+    cursor: pointer;
+    transition: transform 0.3s;
+}
+
+.zoom-effect img:hover {
+    transform: scale(1.1);
+    /* Ajusta este valor según tu preferencia de aumento */
+}
+
+pre {
+    white-space: pre-wrap;
+    font-family: inherit;
+    font-weight: 500;
+}
+
+#productosRelacionadosCarousel .carousel-control-prev,
+#productosRelacionadosCarousel .carousel-control-next {
+    color: #333;
+    /* Color del texto en los botones */
+    border-radius: 50%;
+    /* Bordes redondeados */
+    width: 40px;
+    /* Ancho de los botones */
+    height: 40px;
+    /* Altura de los botones */
+    font-size: 20px;
+    /* Tamaño del icono de flecha */
+    line-height: 1;
+    /* Alineación vertical del contenido */
+    visibility: hidden;
+    /* Ocultar inicialmente los botones */
+    transition: background-color 0.3s, visibility 0.3s;
+    /* Transición suave para los cambios de color y visibilidad */
+}
+
+#productosRelacionadosCarousel .carousel-control-prev-icon,
+#productosRelacionadosCarousel .carousel-control-next-icon {
+    background-color: #333;
+    /* Color de la flecha */
+    padding: 12px;
+    /* Espaciado interno */
+}
+
+#productosRelacionadosCarousel .carousel-control-prev:hover,
+#productosRelacionadosCarousel .carousel-control-next:hover {
+    background-color: #d4d4d4;
+    /* Color de fondo gris plateado claro al pasar el cursor por encima */
+}
+
+#productosRelacionadosCarousel:hover .carousel-control-prev,
+#productosRelacionadosCarousel:hover .carousel-control-next {
+    visibility: visible;
+    /* Mostrar los botones al acercarse */
+}
+
+/* Estilos para centrar los botones en ambos bordes */
+#productosRelacionadosCarousel .carousel-control-prev {
+    left: 0;
+}
+
+#productosRelacionadosCarousel .carousel-control-next {
+    right: 0;
+}
+
+.mt-4 {
+    margin-top: 4rem;
+}
+
+.btn-carousel {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    background-color: #ccc;
+    color: #333;
+    font-size: 1.5rem;
+    opacity: 0;
+    visibility: hidden;
+    /* Ocultar los botones inicialmente */
+    transition: opacity 0.3s, visibility 0.3s;
+    /* Transición suave para los cambios de opacidad y visibilidad */
+}
+
+#productosRelacionadosCarousel:hover .btn-carousel {
+    opacity: 1;
+    visibility: visible;
+    /* Mostrar los botones al acercarse */
+}
+
+.btn-carousel:hover {
+    background-color: #555;
+    color: #fff;
+}

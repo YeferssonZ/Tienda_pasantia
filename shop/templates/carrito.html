@@ -1,0 +1,68 @@
+{% extends 'base.html' %}
+
+{% block content %}
+{% if subtotal_items %}
+<h2>Carrito de compras</h2>
+<table class="table">
+    <thead>
+        <tr>
+            <th>Producto</th>
+            <th>Cantidad</th>
+            <th>Precio unitario</th>
+            <th>Subtotal</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for item, subtotal in subtotal_items %}
+            <tr>
+                <td>
+                    <img src="{{ item.producto.imagen.url }}" alt="{{ item.producto.nombre }}" width="50">
+                    {{ item.producto.nombre }}
+                </td>
+                <td>
+                    <button class="btn btn-sm btn-danger btn-cambiar-cantidad" data-item-id="{{ item.id }}" data-action="restar">-</button>
+                    {{ item.cantidad }}
+                    <button class="btn btn-sm btn-success btn-cambiar-cantidad" data-item-id="{{ item.id }}" data-action="sumar">+</button>
+                </td>
+                <td>S/. {{ item.producto.precio }}</td>
+                <td>S/. {{ subtotal }}</td>
+            </tr>
+        {% endfor %}
+        <tr>
+            <td colspan="3" class="text-end"><strong>Total:</strong></td>
+            <td><strong>S/. {{ total }}</strong></td>
+        </tr>
+    </tbody>
+</table>
+{% else %}
+    <p>El carrito está vacío</p>
+{% endif %}
+<script>
+    const btnCambiarCantidad = document.querySelectorAll('.btn-cambiar-cantidad');
+
+    btnCambiarCantidad.forEach(button => {
+        button.addEventListener('click', function() {
+            const itemId = this.dataset.itemId;
+            const action = this.dataset.action;
+            cambiarCantidad(itemId, action);
+        });
+    });
+
+    function cambiarCantidad(itemId, action) {
+        fetch(`/cambiar_cantidad/${itemId}/${action}/`, {
+            method: 'GET',
+            headers: {
+                'X-Requested-With': 'XMLHttpRequest'
+            }
+        })
+        .then(response => response.json())
+        .then(data => {
+            if (data.success) {
+                // Recargar la página para refrescar los datos
+                location.reload();
+            }
+        });
+    }
+</script>
+
+{% endblock %}

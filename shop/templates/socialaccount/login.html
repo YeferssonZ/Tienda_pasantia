@@ -1,0 +1,89 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Login</title>
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+  <!-- Font Awesome icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+  <link href="{% static 'css/login.css' %}" rel="stylesheet" />
+</head>
+
+<body>
+  <div class="container mt-5">
+    <div class="row">
+      <div class="col-md-5 mx-auto">
+        <div class="login-container">
+          <h2 class="login-heading">Iniciar Sesión</h2>
+          <form class="login-form" method="post" action="{% url 'shop:login' %}">
+            {% csrf_token %}
+            <div class="form-group">
+              <label for="id_login">Correo Electrónico o Usuario</label>
+              <input type="text" class="form-control" name="login" placeholder="Correo Electrónico o Usuario" required>
+            </div>
+            <div class="form-group">
+              <label for="id_password">Contraseña</label>
+              <input type="password" class="form-control" name="password" placeholder="Contraseña" required>
+            </div>
+            <div class="form-group form-check">
+              <input type="checkbox" class="form-check-input" id="remember">
+              <label class="form-check-label" for="remember">Recordarme</label>
+            </div>
+            <button type="submit" class="btn btn-primary btn-block">Iniciar Sesión</button>
+          </form>
+          <div class="mt-2">
+            {% if form.errors %}
+            <div class="alert alert-danger">
+              <strong>Error:</strong> Credenciales de inicio de sesión incorrectas.
+            </div>
+            {% endif %}
+          </div>
+          <div class="divider d-flex align-items-center my-3">
+            <p class="text-center fw-bold mx-3 mb-0 text-muted">O</p>
+          </div>
+          <div class="mt-3 login-social-btn justify-content-center">
+            <form method="post">
+              {% csrf_token %}
+              <button type="submit" class="btn btn-danger btn-block">
+                <i class="fab fa-google mr-2"></i>Iniciar Sesión con Google
+              </button>
+            </form>
+          </div>
+          <p class="mt-3 text-center">¿No tienes una cuenta? <a href="{% url 'shop:signup' %}">Regístrate</a></p>
+        </div>
+      </div>
+      <div class="col-md-6 d-flex align-items-center">
+        <div class="lottie-animation" id="lottie-animation"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js"></script>
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+  <!-- Lottie JS -->
+  <script src="https://cdn.jsdelivr.net/npm/lottie-web@5.7.4/build/player/lottie.min.js"></script>
+  <!-- Lottie Animation -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function () {
+      // Reemplaza la variable animationData con tus datos JSON de Lottie reales
+      const animationData = {
+        container: document.getElementById("lottie-animation"),
+        renderer: "svg",
+        loop: true,
+        autoplay: true,
+        path: "https://lottie.host/7236fe8f-bedc-40b0-8d53-2f161ac05bb0/j6fUkIcZp7.json",
+      };
+
+      // Reproduce la animación de Lottie
+      lottie.loadAnimation(animationData);
+    });
+  </script>
+</body>
+
+</html>

@@ -1,0 +1,50 @@
+body {
+    background-color: #f8f9fa;
+  }
+
+  .login-container {
+    /* max-width: 800px; */
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    background-color: #fff;
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+    
+  }
+
+  .login-heading {
+    text-align: center;
+    margin-bottom: 30px;
+  }
+
+  .form-group label {
+    font-weight: bold;
+  }
+
+  .login-form .btn-primary {
+    width: 100%;
+  }
+
+  .login-social-btn {
+    display: flex;
+    justify-content: space-between;
+  }
+
+  .login-social-btn .btn {
+    flex: 1;
+    margin-right: 5px;
+  }
+
+  .lottie-animation {
+    width: 400px;
+    height: 400px;
+  }
+
+  .divider:after,
+  .divider:before {
+    content: "";
+    flex: 1;
+    height: 1px;
+    background: #eee;
+  }

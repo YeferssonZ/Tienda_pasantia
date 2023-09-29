@@ -1,0 +1,37 @@
+/* Estilos para los productos dentro de .categoria */
+.categoria .card {
+    transition: transform 0.2s ease-in-out;
+}
+
+.categoria .card:hover {
+    transform: scale(1.05);
+}
+
+.categoria .card-img-top {
+    height: 200px;
+    object-fit: cover;
+}
+
+.categoria .card-title {
+    font-size: 1.2rem;
+    margin-bottom: 0;
+}
+
+.categoria .card-text {
+    font-size: 1rem;
+    margin-bottom: 0;
+}
+
+.categoria .btn {
+    width: 100%;
+}
+
+.categoria .btn-primary {
+    background-color: #007bff;
+    border-color: #007bff;
+}
+
+.categoria .btn-primary:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}

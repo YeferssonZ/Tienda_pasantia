@@ -1,0 +1,128 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-6">
+            <!-- Product image with zoom effect -->
+            <div class="zoom-effect border border-primary rounded">
+                <img src="{{ producto.imagen.url }}" class="img-fluid" alt="{{ producto.nombre }}" style="max-height: 400px;">
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row align-items-center justify-content-between mb-3">
+                <!-- Product name and price -->
+                <div class="col-md-8">
+                    <h1 class="fw-bolder">{{ producto.nombre }}</h1>
+                    <p class="h4 fw-bold text-primary">S/. {{ producto.precio }}</p>
+                </div>
+                <!-- Product navigation buttons -->
+                <div class="col-md-4 text-end">
+                    <div class="btn-group">
+                        {% if producto_anterior %}
+                        <a href="{% url 'shop:mostrar_producto' producto_anterior.id %}" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-left"></i>
+                        </a>
+                        {% endif %}
+                        {% if producto_siguiente %}
+                        <a href="{% url 'shop:mostrar_producto' producto_siguiente.id %}" class="btn btn-outline-primary">
+                            <i class="bi bi-arrow-right"></i>
+                        </a>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            <hr>
+            <!-- Product stock and cart -->
+            <div class="row mb-3">
+                <div class="col-md-8">
+                    {% if producto.stock > 0 %}
+                    <p class="h6">Stock: {{ producto.stock }}</p>
+                    <div class="input-group">
+                        <button class="btn btn-outline-secondary" type="button" id="decrease-btn">-</button>
+                        <input type="text" class="form-control text-center" id="quantity-input" value="1" readonly>
+                        <button class="btn btn-outline-secondary" type="button" id="increase-btn">+</button>
+                    </div>
+                    {% else %}
+                    <p class="text-danger">Agotado</p>
+                    {% endif %}
+                </div>
+                <div class="col-md-4 text-end">
+                    <button class="btn btn-primary" id="add-to-cart-btn">
+                        <i class="bi bi-cart"></i> Agregar al carrito
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Product information, specifications, and related products -->
+    <div class="mt-5">
+        <h2 class="fw-bold">Descripción:</h2>
+        <pre>{{ producto.descripcion }}</pre>
+
+        <hr class="my-4">
+        <h2 class="fw-bold">Especificaciones Técnicas:</h2>
+        <ul>
+            {% for especificacion in producto.obtener_especificaciones %}
+            <li>{{ especificacion }}</li>
+            {% endfor %}
+        </ul>
+
+        <!-- Productos Relacionados -->
+        {% if productos_relacionados %}
+        <hr class="my-4">
+        <h2 class="fw-bold">Productos Relacionados:</h2>
+        <div id="productosRelacionadosCarousel" class="carousel slide" data-bs-ride="carousel">
+            <div class="carousel-inner">
+                {% for producto_relacionado in productos_relacionados %}
+                {% if forloop.counter0|divisibleby:4 %}
+                <div class="carousel-item {% if forloop.first %}active{% endif %}">
+                    <div class="row">
+                        {% endif %}
+                        <div class="col-md-3 mb-4">
+                            <div class="card">
+                                <a href="{% url 'shop:mostrar_producto' producto_relacionado.id %}">
+                                    <img src="{{ producto_relacionado.imagen.url }}" class="card-img-top"
+                                        alt="{{ producto_relacionado.nombre }}">
+                                </a>
+                                <div class="card-body">
+                                    <h5 class="card-title">{{ producto_relacionado.nombre }}</h5>
+                                    <p class="card-text">S/. {{ producto_relacionado.precio }}</p>
+                                    {% if producto_relacionado.stock > 0 %}
+                                    <p class="card-text">Stock: {{ producto_relacionado.stock }}</p>
+                                    {% else %}
+                                    <p class="text-danger">Agotado</p>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                        {% if forloop.counter|divisibleby:4 or forloop.last %}
+                    </div>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+            <button class="carousel-control-prev btn-carousel" type="button"
+                data-bs-target="#productosRelacionadosCarousel" data-bs-slide="prev">
+                <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Previous</span>
+            </button>
+            <button class="carousel-control-next btn-carousel" type="button"
+                data-bs-target="#productosRelacionadosCarousel" data-bs-slide="next">
+                <span class="carousel-control-next-icon" aria-hidden="true"></span>
+                <span class="visually-hidden">Next</span>
+            </button>
+        </div>
+        {% else %}
+        <hr class="my-4">
+        <h2 class="fw-bold">Productos Relacionados:</h2>
+        <div class="alert alert-warning mt-5" role="alert" style="background-color: #f8d7da;">
+            <h4 class="alert-heading">¡Ups! No hay productos relacionados disponibles.</h4>
+            <p class="mb-0">Selecciona otra subcategoría para ver productos relacionados.</p>
+        </div>
+        {% endif %}
+
+    </div>
+</div>
+{% endblock %}

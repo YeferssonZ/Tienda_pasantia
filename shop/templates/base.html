@@ -1,0 +1,182 @@
+{% load socialaccount %}
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no" />
+    <meta name="description" content="" />
+    <meta name="author" content="" />
+    <title>Shop Homepage - CODIGO SAC.</title>
+    <!-- Favicon-->
+    <link rel="icon" type="image/x-icon" href="{% static 'assets/favicon.ico' %}" />
+    <!-- Bootstrap icons-->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.5.0/font/bootstrap-icons.css" rel="stylesheet" />
+    <!-- Core theme CSS (includes Bootstrap)-->
+    <link href="{% static 'css/styles.css' %}" rel="stylesheet" />
+    <!-- Enlace al archivo base.css -->
+    <link href="{% static 'css/base.css' %}" rel="stylesheet" />
+    <!-- Enlace al archivo categoria.css -->
+    <link href="{% static 'css/categoria.css' %}" rel="stylesheet" />
+    <!-- Enlace al archivo producto.css -->
+    <link href="{% static 'css/producto.css' %}" rel="stylesheet" />
+    <!-- Agrega los enlaces CSS de Bootstrap -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+
+</head>
+
+<body>
+    <div class="container-fluid bg-primary py-2 encabezado-buscadores">
+        <!-- Buscador y Login -->
+        <div class="container-fluid">
+            <div class="row align-items-center">
+                <div class="col-md-8">
+                    <form class="d-flex" method="get" action="{% url 'shop:buscar_productos' %}">
+                        <div class="input-group">
+                            <input class="form-control form-control-lg" type="search" name="q" id="search-input"
+                                placeholder="Buscar productos..." aria-label="Search" autocomplete="off">
+                            <button class="btn btn-primary btn-lg btn-search" type="submit">
+                                <i class="bi-search"></i>
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                <div class="col-md-4 text-end">
+                    {% if user.is_authenticated %}
+                    <!-- Si el usuario está autenticado, muestra la foto y el nombre del usuario -->
+                    <div class="dropdown">
+                        <a class="btn btn-custom-login dropdown-toggle" href="#" role="button" id="userDropdown"
+                            data-bs-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                            {% if user.socialaccount_set.first %}
+                                <img src="{{ user.socialaccount_set.first.get_avatar_url }}" alt="User Avatar"
+                                    class="rounded-circle me-1" style="width: 24px; height: 24px;">
+                            {% else %}
+                                <img src="{% static 'image/login.png' %}" alt="Default Avatar"
+                                    class="rounded-circle me-1" style="width: 24px; height: 24px;">
+                            {% endif %}
+                            {{ user.username|title }}
+                        </a>
+                        <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="userDropdown">
+                            <li><a class="dropdown-item" href="{% url 'shop:profile' %}">My Account</a></li>
+                            <li><a class="dropdown-item" href="{% url 'shop:logout' %}">Logout</a></li>
+                        </ul>
+                    </div>
+                    {% else %}
+                    <!-- Si el usuario no está autenticado, muestra el enlace de inicio de sesión -->
+                    <a href="{% provider_login_url 'google' %}" class="btn btn-primary">Login</a>
+                    {% endif %}
+                </div>                
+            </div>
+        </div>
+    </div>
+
+    <!-- Navigation-->
+    <nav class="navbar navbar-expand-lg navbar-light bg-light sticky-top">
+        <div class="container px-4 px-lg-5">
+            <a class="navbar-brand" href="/">CODIGO SAC.</a>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0 ms-lg-4">
+                    <!-- Lista de Categorías y Subcategorías -->
+                    <li class="nav-item dropdown dropdown-hover">
+                        <a class="nav-link dropdown-toggle" id="navbarDropdown" role="button" data-bs-toggle="dropdown"
+                            aria-expanded="false">Productos</a>
+                        <ul class="dropdown-menu multi-column columns-3" aria-labelledby="navbarDropdown">
+                            <div class="row">
+                                {% for categoria in categorias %}
+                                <div class="col">
+                                    <li><a class="dropdown-item"
+                                            href="{% url 'shop:mostrar_categoria' categoria.id %}">{{categoria.nombre|upper}}</a>
+                                    </li>
+                                    {% for subcategoria in categoria.subcategoria_set.all %}
+                                    <li><a class="dropdown-item"
+                                            href="{% url 'shop:mostrar_subcategoria' subcategoria.id %}">{{subcategoria.nombre}}</a>
+                                    </li>
+                                    {% endfor %}
+                                </div>
+                                {% endfor %}
+                            </div>
+                        </ul>
+                    </li>
+                    <li class="nav-item"><a class="nav-link" href="#!">Tutoriales</a></li>
+                    <li class="nav-item"><a class="nav-link" href="#!">Quienes somos</a></li>
+                </ul>
+                <form class="d-flex">
+                    <a class="btn btn-outline-light me-2" href="{% url 'shop:ver_carrito' %}">
+                        <i class="bi-cart-fill me-1"></i>
+                        Cart
+                        <span id="carrito-cantidad-badge" class="badge bg-light text-dark ms-1 rounded-pill">{{ carrito_cantidad }}</span>
+                    </a>
+                </form>                
+            </div>
+        </div>
+    </nav>
+
+    <main style="margin: 15px 0;">
+        <!-- Contenido específico de cada página -->
+        {% block content %}
+        {% endblock %}
+    </main>
+
+    <!-- Pie de página -->
+    <footer class="bg-dark text-white py-4">
+        <div class="container">
+            <div class="row">
+                <!-- Columna de información de contacto -->
+                <div class="col-md-4 mb-3">
+                    <h5>Contacto</h5>
+                    <p><i class="bi bi-geo-alt-fill"></i> Dirección: Calle Octavio Muñoz Najar 223 -Of. 209 C.C. CompuPlaza</p>
+                    <p><i class="bi bi-telephone-fill"></i> Teléfono: +51 958 218 214</p>
+                    <p><i class="bi bi-envelope-fill"></i> Correo electrónico: codigo.aqp@gmail.com</p>
+                </div>
+                <!-- Columna de enlaces importantes -->
+                <div class="col-md-4 mb-3">
+                    <h5>Enlaces</h5>
+                    <ul class="list-unstyled">
+                        <li><a class="text-white" href="/">Inicio</a></li>
+                        <li><a class="text-white" href="#!">Productos</a></li>
+                        <li><a class="text-white" href="#!">Ofertas</a></li>
+                        <li><a class="text-white" href="#!">Contacto</a></li>
+                    </ul>
+                </div>
+                <!-- Columna de redes sociales -->
+                <div class="col-md-4 mb-3">
+                    <h5>Redes Sociales</h5>
+                    <ul class="list-inline">
+                        <li class="list-inline-item"><a class="text-white" href="#!"><i class="bi bi-facebook"></i></a>
+                        </li>
+                        <li class="list-inline-item"><a class="text-white" href="#!"><i class="bi bi-twitter"></i></a>
+                        </li>
+                        <li class="list-inline-item"><a class="text-white" href="#!"><i class="bi bi-instagram"></i></a>
+                        </li>
+                        <li class="list-inline-item"><a class="text-white" href="#!"><i class="bi bi-linkedin"></i></a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <!-- Créditos y derechos de autor -->
+        <div class="container text-center mt-3">
+            <p class="m-0">© 2023 CODIGO S.A.C. | Todos los derechos reservados</p>
+        </div>
+    </footer>
+
+    <!-- Bootstrap core JS y otros scripts -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/js/bootstrap.bundle.min.js"></script>
+    <!-- Core theme JS-->
+    <script src="{% static 'js/scripts.js' %}"></script>
+    <script src="{% static 'js/search.js' %}"></script>
+    <!-- Agrega el script de Bootstrap -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-aAf0km2dsGfoM6q9qYbi3BZpAR5vLrWgkwr3r7h1G9pJcuYy1H8FKNZlVU0l3RM0"
+        crossorigin="anonymous"></script>
+
+</body>
+
+</html>
